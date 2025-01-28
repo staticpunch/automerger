@@ -1,0 +1,43 @@
+# Model configuration
+model_paths:
+  - /workspace/models/llama-3.2-3b-smol
+  - /workspace/models/smol-experts/llama-3.2-3b-expert-math
+
+mode: vector_input
+constrain_mode: identity
+
+# Dataset configuration
+dataset_configs:
+  /workspace/data/magpie-generic/synthetic-15k: 10000
+  /workspace/data/expert-math/20k: 10000
+  
+source_keys: [0, 1]
+train_split: train
+max_length: 3072
+
+# For uniform initialization:
+mask_init:
+  strategy: uniform
+  factors: [0.2, 0.8]
+
+# Training parameters
+loss_func_name: kl_div
+mask_decay:
+output_dir: /workspace/automerger/results/sythetic/merge-math-3b-u28
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 8
+gradient_accumulation_steps: 64
+lr_scheduler: cosine
+learning_rate: 5e-3
+num_train_epochs: 3
+save_steps: 100
+eval_steps: 5000
+logging_steps: 10
+eval_strategy: steps
+report_to: none
+remove_unused_columns: false
+logging_first_step: true
+bf16: true
+gradient_checkpointing: false
+train_on_inputs: true
+
